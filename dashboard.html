@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Mon espace</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite">
+      <span id="header-nom" style="font-size:14px;color:#555;"></span>
+      <button class="btn-connexion" onclick="seDeconnecter()">Se déconnecter</button>
+    </div>
+  </header>
+
+  <!-- DASHBOARD PARTICULIER -->
+  <div id="dashboard-particulier" class="cache">
+    <div class="dashboard-hero">
+      <h1>Bonjour <span id="part-prenom"></span> 👋</h1>
+      <p>Publiez vos matériaux pour qu'un professionnel vienne les récupérer</p>
+      <button class="btn-post" onclick="ouvrirFormulaire()">+ Publier une annonce</button>
+      <a href="messages.html" class="btn-messages">📬 Voir mes messages</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>Mes annonces</h2>
+      <div class="grille" id="grille-mes-annonces">
+        <p class="vide">Vous n'avez pas encore publié d'annonce.</p>
+      </div>
+    </div>
+    <div style="text-align:center;padding:32px 24px;border-top:1px solid #f0f0f0;margin-top:24px;">
+      <button onclick="demanderSuppression()"
+        style="background:none;border:none;color:#e74c3c;font-size:13px;cursor:pointer;text-decoration:underline;">
+        Supprimer mon compte
+      </button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PRO -->
+  <div id="dashboard-pro" class="cache">
+    <div class="dashboard-hero pro">
+      <h1>Bienvenue <span id="pro-nom-societe"></span> 🏭</h1>
+      <p>Consultez les annonces de particuliers et contactez-les directement</p>
+      <a href="messages.html" class="btn-messages">📤 Mes messages envoyés</a>
+    </div>
+    <div class="dashboard-section">
+      <div class="filtres">
+        <button class="chip actif" onclick="filtrerCategorie('Tout', this)">Tout</button>
+        <button class="chip" onclick="filtrerCategorie('Bois', this)">Bois</button>
+        <button class="chip" onclick="filtrerCategorie('Métal', this)">Métal</button>
+        <button class="chip" onclick="filtrerCategorie('Carton', this)">Carton / Papier</button>
+        <button class="chip" onclick="filtrerCategorie('Plastique', this)">Plastique</button>
+        <button class="chip" onclick="filtrerCategorie('Verre', this)">Verre</button>
+        <button class="chip" onclick="filtrerCategorie('Électronique', this)">Électronique</button>
+      </div>
+      <div class="grille" id="grille-pro"></div>
+    </div>
+    <div style="text-align:center;padding:32px 24px;border-top:1px solid #f0f0f0;margin-top:24px;">
+      <button onclick="demanderSuppression()"
+        style="background:none;border:none;color:#e74c3c;font-size:13px;cursor:pointer;text-decoration:underline;">
+        Supprimer mon compte
+      </button>
+    </div>
+  </div>
+
+  <!-- FORMULAIRE ANNONCE (particulier) -->
+  <div class="modal-fond" id="modal-fond">
+    <div class="modal">
+      <h2>Publier une annonce</h2>
+      <div class="champ">
+        <label>Titre de l'annonce</label>
+        <input type="text" id="titre" placeholder="Ex : Planches de bois récupérées" />
+      </div>
+      <div class="champ">
+        <label>Catégorie</label>
+        <select id="categorie">
+          <option value="Bois">Bois</option>
+          <option value="Métal">Métal</option>
+          <option value="Carton">Carton / Papier</option>
+          <option value="Plastique">Plastique</option>
+          <option value="Verre">Verre</option>
+          <option value="Électronique">Électronique</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label>Quantité estimée</label>
+        <input type="text" id="quantite" placeholder="Ex : 50 kg, 10 pièces..." />
+      </div>
+      <div class="champ">
+        <label>Description</label>
+        <textarea id="description" placeholder="Décrivez vos matériaux, leur état..."></textarea>
+      </div>
+      <div class="champ">
+        <label>Photos (optionnel — jusqu'à 5 photos)</label>
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('input-photos').click()">
+          <div class="upload-icone">📷</div>
+          <div class="upload-texte">Cliquez pour ajouter des photos</div>
+          <div class="upload-sous-texte">JPG, PNG — max 5 Mo par photo</div>
+        </div>
+        <input type="file" id="input-photos" accept="image/*" multiple style="display:none"
+          onchange="previsualiserPhotos(this.files)" />
+        <div class="photos-preview" id="photos-preview"></div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-annuler" onclick="fermerFormulaire()">Annuler</button>
+        <button class="btn-publier" onclick="publierAnnonce()">Publier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONTACT PRO -->
+  <div class="modal-fond" id="modal-contact">
+    <div class="modal">
+      <h2>Contacter le particulier</h2>
+      <p style="font-size:13px;color:#555;margin-bottom:16px;">
+        Votre message sera envoyé au donneur de cette annonce.
+      </p>
+      <div class="champ">
+        <label>Votre message</label>
+        <textarea id="msg-contact" placeholder="Bonjour, je suis intéressé par vos matériaux..."></textarea>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-annuler" onclick="fermerContact()">Annuler</button>
+        <button class="btn-publier" onclick="envoyerContact()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+  <script src="header.js"></script>
+
+  <footer class="footer">
+    <div class="footer-liens">
+      <a href="index.html">Accueil</a>
+      <a href="comment-ca-marche.html">Comment ça marche</a>
+      <a href="cgu.html">CGU & Confidentialité</a>
+      <a href="cgu.html#mentions">Mentions légales</a>
+    </div>
+    <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+  </footer>
+
+</body>
+</html>

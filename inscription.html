@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Inscription</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+<header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite"></div>
+</header>
+
+  <div class="page-auth">
+
+    <!-- CHOIX DU PROFIL -->
+    <div id="etape-choix">
+      <h1>Créer un compte</h1>
+      <p class="sous-titre">Vous êtes :</p>
+      <div class="choix-profil">
+        <div class="carte-profil" onclick="choisirProfil('particulier')">
+          <div class="profil-icone">🏠</div>
+          <div class="profil-titre">Particulier</div>
+          <div class="profil-desc">Je veux donner des matériaux à recycler</div>
+        </div>
+        <div class="carte-profil" onclick="choisirProfil('pro')">
+          <div class="profil-icone">🏭</div>
+          <div class="profil-titre">Professionnel</div>
+          <div class="profil-desc">Je récupère des matériaux pour les recycler</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE PARTICULIER -->
+    <div id="etape-particulier" class="cache">
+      <button class="btn-retour" onclick="retour()">← Retour</button>
+      <h1>Inscription Particulier</h1>
+      <p class="sous-titre">Créez votre compte pour publier des annonces</p>
+      <div class="formulaire">
+        <div class="champ">
+          <label>Prénom et nom</label>
+          <input type="text" id="part-nom" placeholder="Ex : Marie Dupont" />
+        </div>
+        <div class="champ">
+          <label>Email</label>
+          <input type="email" id="part-email" placeholder="marie@email.com" />
+        </div>
+        <div class="champ">
+          <label>Mot de passe</label>
+          <input type="password" id="part-mdp" placeholder="Au moins 6 caractères" />
+        </div>
+        <div class="champ">
+          <label>Ville</label>
+          <input type="text" id="part-ville" placeholder="Ex : Paris"
+  onkeydown="if(event.key==='Enter') inscrireParticulier();" />
+        </div>
+        <div class="champ-check">
+          <input type="checkbox" id="part-rgpd" />
+          <label for="part-rgpd">J'accepte la <a href="cgu.html#confidentialite">politique de confidentialité</a></label>
+        </div>
+        <button class="btn-submit" onclick="inscrireParticulier()">Créer mon compte</button>
+        <p class="lien-connexion">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE PRO -->
+    <div id="etape-pro" class="cache">
+      <button class="btn-retour" onclick="retour()">← Retour</button>
+      <h1>Inscription Professionnel</h1>
+      <p class="sous-titre">Créez votre compte pour accéder aux annonces</p>
+      <div class="formulaire">
+        <div class="champ">
+          <label>Nom de la société</label>
+          <input type="text" id="pro-societe" placeholder="Ex : EcoRecycle SAS" />
+        </div>
+        <div class="champ">
+          <label>Numéro SIRET</label>
+          <input type="text" id="pro-siret" placeholder="14 chiffres" maxlength="14" />
+        </div>
+        <div class="champ">
+          <label>Secteur d'activité</label>
+          <select id="pro-secteur">
+            <option value="">-- Choisir --</option>
+            <option>Recyclage bois</option>
+            <option>Recyclage métaux</option>
+            <option>Recyclage papier / carton</option>
+            <option>Recyclage plastique</option>
+            <option>Recyclage verre</option>
+            <option>Recyclage électronique</option>
+            <option>Recyclage multi-matières</option>
+          </select>
+        </div>
+        <div class="champ">
+          <label>Email professionnel</label>
+          <input type="email" id="pro-email" placeholder="contact@societe.fr" />
+        </div>
+        <div class="champ">
+          <label>Téléphone</label>
+          <input type="tel" id="pro-tel" placeholder="06 00 00 00 00" />
+        </div>
+        <div class="champ">
+          <label>Mot de passe</label>
+          <input type="password" id="pro-mdp" placeholder="Au moins 6 caractères"
+  onkeydown="if(event.key==='Enter') inscrirePro();" />
+        </div>
+        <div class="champ-check">
+          <input type="checkbox" id="pro-certif" />
+          <label for="pro-certif">Je certifie exercer une activité de recyclage</label>
+        </div>
+        <div class="champ-check">
+          <input type="checkbox" id="pro-rgpd" />
+          <label for="pro-rgpd">J'accepte la <a href="cgu.html#confidentialite">politique de confidentialité</a></label>
+        </div>
+        <button class="btn-submit" onclick="inscrirePro()">Créer mon compte pro</button>
+        <p class="lien-connexion">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="inscription.js"></script>
+  <script src="header.js"></script>
+
+<footer class="footer">
+  <div class="footer-liens">
+    <a href="index.html">Accueil</a>
+    <a href="comment-ca-marche.html">Comment ça marche</a>
+    <a href="cgu.html">CGU & Confidentialité</a>
+    <a href="cgu.html#mentions">Mentions légales</a>
+  </div>
+  <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+</footer>
+
+</body>
+</html>

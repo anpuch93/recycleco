@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Mes messages</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite"></div>
+  </header>
+
+  <div class="page-messages">
+
+    <!-- LISTE DES CONVERSATIONS -->
+    <div id="vue-conversations">
+      <div class="messages-header">
+        <h1 id="titre-messages">Mes messages</h1>
+        <a href="dashboard.html" class="btn-retour">← Mon espace</a>
+      </div>
+      <div id="liste-conversations">
+        <p class="vide">Chargement...</p>
+      </div>
+    </div>
+
+    <!-- VUE CHAT D'UNE CONVERSATION -->
+    <div id="vue-chat" style="display:none;">
+      <div class="chat-header">
+        <button class="btn-retour" onclick="retourConversations()">← Retour</button>
+        <div class="chat-header-info">
+          <div class="chat-titre" id="chat-titre"></div>
+          <div class="chat-sous-titre" id="chat-sous-titre"></div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <div class="chat-input">
+        <textarea id="chat-texte" placeholder="Écrivez votre message..." 
+          onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();envoyerChatMessage();}">
+        </textarea>
+        <button class="chat-btn-envoyer" onclick="envoyerChatMessage()">Envoyer</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="header.js"></script>
+  <script src="messages.js"></script>
+
+<footer class="footer">
+  <div class="footer-liens">
+    <a href="index.html">Accueil</a>
+    <a href="comment-ca-marche.html">Comment ça marche</a>
+    <a href="cgu.html">CGU & Confidentialité</a>
+    <a href="cgu.html#mentions">Mentions légales</a>
+  </div>
+  <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+</footer>
+
+</body>
+</html>

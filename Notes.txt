@@ -1,0 +1,6 @@
+Modifier 2025  a 2026 dans le footer et dans les CGU
+Utiliser API pour verifier le SIRET.
+Base de donne
+Emtree du clavier ne marche pas
+
+supabase - anpuch93@gmail.com

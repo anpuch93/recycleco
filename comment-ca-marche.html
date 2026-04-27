@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Comment ça marche</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite"></div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Comment ça marche ?</h1>
+    <p>RecycleCo, c'est simple : vous donnez, les pros récupèrent. La planète vous remercie 🌱</p>
+  </section>
+
+  <!-- POUR LES PARTICULIERS -->
+  <section class="ccm-section">
+    <div class="ccm-titre">
+      <span class="ccm-icone-titre">🏠</span>
+      <h2>Vous êtes particulier</h2>
+      <p>Vous avez des matériaux dont vous voulez vous débarrasser ? C'est gratuit et simple.</p>
+    </div>
+
+    <div class="ccm-etapes">
+      <div class="ccm-etape">
+        <div class="ccm-numero">1</div>
+        <div class="ccm-etape-contenu">
+          <h3>Créez votre compte gratuitement</h3>
+          <p>Inscrivez-vous en 2 minutes avec votre nom, email et ville. Aucune information sensible requise.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero">2</div>
+        <div class="ccm-etape-contenu">
+          <h3>Publiez une annonce</h3>
+          <p>Décrivez vos matériaux (bois, métal, carton...), indiquez la quantité approximative et votre ville. Pas besoin de photo.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero">3</div>
+        <div class="ccm-etape-contenu">
+          <h3>Un professionnel vous contacte</h3>
+          <p>Un recycleur professionnel près de chez vous voit votre annonce et vous envoie un message pour organiser la récupération.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero">4</div>
+        <div class="ccm-etape-contenu">
+          <h3>Il vient récupérer chez vous</h3>
+          <p>Le professionnel se déplace à votre domicile pour récupérer les matériaux. Vous n'avez rien à transporter.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ccm-cta">
+      <a href="inscription.html" class="btn-post">Je m'inscris comme particulier</a>
+    </div>
+  </section>
+
+  <!-- SEPARATEUR -->
+  <div class="ccm-separateur"></div>
+
+  <!-- POUR LES PROS -->
+  <section class="ccm-section pro">
+    <div class="ccm-titre">
+      <span class="ccm-icone-titre">🏭</span>
+      <h2>Vous êtes professionnel du recyclage</h2>
+      <p>Trouvez facilement des gisements de matériaux recyclables près de chez vous.</p>
+    </div>
+
+    <div class="ccm-etapes">
+      <div class="ccm-etape">
+        <div class="ccm-numero pro">1</div>
+        <div class="ccm-etape-contenu">
+          <h3>Créez votre compte professionnel</h3>
+          <p>Inscrivez-vous avec les informations de votre société (nom, SIRET, secteur d'activité). Vérification simple et rapide.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero pro">2</div>
+        <div class="ccm-etape-contenu">
+          <h3>Consultez les annonces</h3>
+          <p>Accédez à toutes les annonces de particuliers. Filtrez par catégorie de matériau ou par région pour trouver ce qui vous intéresse.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero pro">3</div>
+        <div class="ccm-etape-contenu">
+          <h3>Contactez le particulier</h3>
+          <p>Envoyez un message directement au donneur pour convenir d'un rendez-vous de récupération.</p>
+        </div>
+      </div>
+      <div class="ccm-fleche">↓</div>
+      <div class="ccm-etape">
+        <div class="ccm-numero pro">4</div>
+        <div class="ccm-etape-contenu">
+          <h3>Récupérez les matériaux</h3>
+          <p>Rendez-vous chez le particulier pour collecter les matériaux et leur donner une seconde vie dans votre filière de recyclage.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ccm-cta">
+      <a href="inscription.html" class="btn-post" style="background:#185FA5;">Je m'inscris comme professionnel</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="ccm-faq">
+    <h2>Questions fréquentes</h2>
+    <div class="faq-liste">
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Est-ce que c'est gratuit ?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-reponse">
+          Oui, totalement gratuit pour les particuliers. L'inscription et la publication d'annonces ne coûtent rien.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Quels types de matériaux peut-on donner ?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-reponse">
+          Bois, métal, carton, plastique, verre, équipements électroniques... Tout matériau recyclable est accepté. En cas de doute, publiez votre annonce et un pro vous répondra.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Est-ce que je dois transporter les matériaux ?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-reponse">
+          Non ! C'est le professionnel qui se déplace chez vous pour récupérer les matériaux. Vous n'avez rien à faire sauf les avoir mis de côté.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Mes données personnelles sont-elles protégées ?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-reponse">
+          Oui. RecycleCo respecte le RGPD. Vos données ne sont jamais revendues. Votre adresse exacte n'est communiquée qu'au professionnel que vous acceptez de contacter.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Les professionnels sont-ils vérifiés ?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-reponse">
+          Chaque professionnel fournit son numéro SIRET et certifie exercer une activité de recyclage lors de son inscription. Nous vous recommandons de vérifier l'identité du professionnel avant toute récupération.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-liens">
+      <a href="index.html">Accueil</a>
+      <a href="comment-ca-marche.html">Comment ça marche</a>
+      <a href="inscription.html">S'inscrire</a>
+      <a href="connexion.html">Se connecter</a>
+      <a href="cgu.html#mentions">Mentions légales</a>
+    </div>
+    <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+  </footer>
+
+  <script src="header.js"></script>
+  <script src="comment-ca-marche.js"></script>
+</body>
+</html>

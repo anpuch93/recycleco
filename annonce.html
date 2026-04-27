@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Annonce</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite"></div>
+  </header>
+
+  <div class="page-annonce">
+
+    <a href="javascript:history.back()" class="btn-retour">← Retour aux annonces</a>
+
+    <div class="annonce-carte">
+
+      <div class="annonce-image" id="annonce-image">📦</div>
+
+      <div class="annonce-contenu">
+        <div class="annonce-badges">
+          <span class="badge badge-particulier" id="annonce-type">Particulier</span>
+          <span class="badge badge-urgent" id="annonce-urgent" style="display:none">Urgent</span>
+        </div>
+
+        <h1 id="annonce-titre">Chargement...</h1>
+
+        <div class="annonce-infos">
+          <div class="annonce-info-ligne">
+            <span class="info-label">📍 Lieu</span>
+            <span id="annonce-lieu">—</span>
+          </div>
+          <div class="annonce-info-ligne">
+            <span class="info-label">📦 Quantité</span>
+            <span id="annonce-quantite">—</span>
+          </div>
+          <div class="annonce-info-ligne">
+            <span class="info-label">🗂 Catégorie</span>
+            <span id="annonce-categorie">—</span>
+          </div>
+        </div>
+
+        <div class="annonce-description" id="annonce-description"></div>
+
+        <div id="zone-contact"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONTACT -->
+  <div class="modal-fond" id="modal-contact">
+    <div class="modal">
+      <h2>Contacter le particulier</h2>
+      <p style="font-size:13px;color:#555;margin-bottom:16px;">
+        Votre message sera transmis au donneur de cette annonce.
+      </p>
+      <div class="champ">
+        <label>Votre message</label>
+        <textarea id="msg-contact" placeholder="Bonjour, je suis intéressé par vos matériaux..."></textarea>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-annuler" onclick="fermerContact()">Annuler</button>
+        <button class="btn-publier" onclick="envoyerContact()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="header.js"></script>
+  <script src="annonce.js"></script>
+
+<footer class="footer">
+  <div class="footer-liens">
+    <a href="index.html">Accueil</a>
+    <a href="comment-ca-marche.html">Comment ça marche</a>
+    <a href="cgu.html">CGU & Confidentialité</a>
+    <a href="cgu.html#mentions">Mentions légales</a>
+  </div>
+  <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+</footer>
+
+</body>
+</html>

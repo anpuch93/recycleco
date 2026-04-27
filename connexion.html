@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecycleCo — Connexion</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+</head>
+<body>
+
+<header class="header">
+    <a href="index.html" class="logo">Recycle<span>Co</span></a>
+    <div class="header-droite"></div>
+</header>
+
+  <div class="page-auth">
+    <h1>Se connecter</h1>
+    <p class="sous-titre">Accédez à votre espace RecycleCo</p>
+    <div class="formulaire">
+      <div class="champ">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="votre@email.com" />
+      </div>
+      <div class="champ">
+        <label>Mot de passe</label>
+        <input type="password" id="mdp" placeholder="Votre mot de passe" 
+  onkeydown="if(event.key==='Enter') seConnecter();" />
+      </div>
+      <button class="btn-submit" onclick="seConnecter()">Se connecter</button>
+      <p class="lien-connexion">Pas encore de compte ? <a href="inscription.html">S'inscrire</a></p>
+    </div>
+  </div>
+
+  <script src="connexion.js"></script>
+  <script src="header.js"></script>
+
+<footer class="footer">
+  <div class="footer-liens">
+    <a href="index.html">Accueil</a>
+    <a href="comment-ca-marche.html">Comment ça marche</a>
+    <a href="cgu.html">CGU & Confidentialité</a>
+    <a href="cgu.html#mentions">Mentions légales</a>
+  </div>
+  <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
+</footer>
+
+</body>
+</html>
