@@ -53,7 +53,7 @@ async function inscrireParticulier() {
   });
 
   alert("Compte créé ! Bienvenue " + nom + " 🎉\nVérifiez votre email pour confirmer votre compte.");
-  window.location.href = "connexion.html";
+  window.location.href = "confirmation.html";
 }
 
 async function inscrirePro() {
@@ -110,5 +110,5 @@ async function inscrirePro() {
   });
 
   alert("Compte pro créé ! Bienvenue " + societe + " 🎉\nVérifiez votre email pour confirmer votre compte.");
-  window.location.href = "connexion.html";
+  window.location.href = "confirmation.html";
 }
