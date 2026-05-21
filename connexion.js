@@ -17,18 +17,36 @@ async function seConnecter() {
     return;
   }
 
-  // Récupère le profil complet depuis la table utilisateurs
+  // Récupère le profil depuis la table utilisateurs
   const { data: profil } = await db
     .from("utilisateurs")
     .select("*")
     .eq("id", data.user.id)
     .single();
 
-console.log("Profil récupéré:", profil); // ← AJOUTE ICI
-    
-  // Sauvegarde en local pour le header et les pages
+  // Si profil introuvable, on le crée depuis les métadonnées Supabase Auth
+  if (!profil) {
+    const meta = data.user.user_metadata;
+    const nouveauProfil = {
+      id: data.user.id,
+      type: meta.type || "particulier",
+      nom: meta.nom || null,
+      email: data.user.email,
+      ville: meta.ville || null,
+      societe: meta.societe || null,
+      siret: meta.siret || null,
+      secteur: meta.secteur || null,
+      telephone: meta.telephone || null
+    };
+
+    await db.from("utilisateurs").insert(nouveauProfil);
+    localStorage.setItem("connecte", "true");
+    localStorage.setItem("utilisateur", JSON.stringify(nouveauProfil));
+    window.location.href = "dashboard.html";
+    return;
+  }
+
   localStorage.setItem("connecte", "true");
   localStorage.setItem("utilisateur", JSON.stringify(profil));
-
-  window.location.href = profil.type === "pro" ? "dashboard.html" : "dashboard.html";
+  window.location.href = "dashboard.html";
 }

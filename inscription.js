@@ -44,11 +44,14 @@ async function inscrireParticulier() {
     return;
   }
 
+  // Sauvegarde dans la table utilisateurs seulement si user existe
+if (data.user) {
   await db.from("utilisateurs").insert({
     id: data.user.id,
     type: "particulier",
     nom, email, ville
   });
+}
 
   window.location.href = "confirmation.html";
 }
@@ -97,12 +100,14 @@ async function inscrirePro() {
     return;
   }
 
+  if (data.user) {
   await db.from("utilisateurs").insert({
     id: data.user.id,
     type: "pro",
     email, societe, siret, secteur,
     telephone: tel
   });
+}
 
   window.location.href = "confirmation.html";
 }
