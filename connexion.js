@@ -1,3 +1,10 @@
+// Affiche le message de confirmation si l'email vient d'être validé
+window.onload = function () {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("confirmed") === "true") {
+    document.getElementById("msg-confirmation").style.display = "block";
+  }
+};
 async function seConnecter() {
   const email = document.getElementById("email").value.trim();
   const mdp = document.getElementById("mdp").value.trim();
