@@ -48,6 +48,30 @@
   </div>
   <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
 </footer>
-
+<script>
+window.onload = async function() {
+  const params = new URLSearchParams(window.location.search);
+  
+  // Affiche le message si email confirmé
+  if (params.get("confirmed") === "true") {
+    const tokenHash = params.get("token_hash");
+    const type = params.get("type");
+    
+    // Vérifie le token avec Supabase
+    if (tokenHash) {
+      const { error } = await db.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: type || "email"
+      });
+      
+      if (!error) {
+        document.getElementById("msg-confirmation").style.display = "block";
+      }
+    } else {
+      document.getElementById("msg-confirmation").style.display = "block";
+    }
+  }
+};
+</script>
 </body>
 </html>
