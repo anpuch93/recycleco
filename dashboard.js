@@ -73,8 +73,12 @@ console.log("Utilisateur complet:", utilisateur);
             <span class="badge badge-particulier">Particulier</span>
             <span class="carte-quantite">${a.quantite || ""}</span>
           </div>
-          <button class="carte-contact" style="background:#e74c3c;margin-top:10px;"
-            onclick="supprimerAnnonce('${a.id}')">🗑 Supprimer</button>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+  <button class="carte-contact" style="background:#185FA5;" 
+    onclick="event.stopPropagation();ouvrirModification('${a.id}')">✏️ Modifier</button>
+  <button class="carte-contact" style="background:#e74c3c;" 
+    onclick="event.stopPropagation();supprimerAnnonce('${a.id}')">🗑 Supprimer</button>
+</div>
         </div>
       </div>`;
   });
@@ -294,4 +298,64 @@ async function demanderSuppression() {
 
   alert("Votre demande de suppression a été prise en compte. Vos données seront effacées dans 30 jours.");
   window.location.href = "index.html";
+}
+let annonceEnModification = null;
+
+async function ouvrirModification(id) {
+  // Récupère l'annonce depuis Supabase
+  const { data: annonce } = await db
+    .from("annonces")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (!annonce) return;
+
+  annonceEnModification = id;
+  document.getElementById("modif-titre").value = annonce.titre || "";
+  document.getElementById("modif-categorie").value = annonce.categorie || "Bois";
+  document.getElementById("modif-quantite").value = annonce.quantite || "";
+  document.getElementById("modif-description").value = annonce.description || "";
+  document.getElementById("modal-modification").classList.add("ouvert");
+}
+
+function fermerModification() {
+  document.getElementById("modal-modification").classList.remove("ouvert");
+  annonceEnModification = null;
+}
+
+async function sauvegarderModification() {
+  const titre = document.getElementById("modif-titre").value.trim();
+  const categorie = document.getElementById("modif-categorie").value;
+  const quantite = document.getElementById("modif-quantite").value.trim();
+  const description = document.getElementById("modif-description").value.trim();
+
+  if (!titre) {
+    alert("Merci d'entrer un titre.");
+    return;
+  }
+
+  const icones = { Bois: "🪵", Métal: "🔩", Carton: "📦", Plastique: "♻️", Verre: "🫙", Électronique: "💻" };
+  const couleurs = { Bois: "#EAF3DE", Métal: "#E6F1FB", Carton: "#FAEEDA", Plastique: "#FBEAF0", Verre: "#E1F5EE", Électronique: "#F3E8FF" };
+
+  const { error } = await db
+    .from("annonces")
+    .update({
+      titre,
+      categorie,
+      quantite: quantite || "Non précisé",
+      description,
+      icone: icones[categorie] || "📦",
+      couleur: couleurs[categorie] || "#f0f0f0"
+    })
+    .eq("id", annonceEnModification);
+
+  if (error) {
+    alert("Erreur lors de la modification : " + error.message);
+    return;
+  }
+
+  fermerModification();
+  await chargerMesAnnonces();
+  alert("Annonce modifiée avec succès ! ✅");
 }

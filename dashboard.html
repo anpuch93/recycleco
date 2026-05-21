@@ -142,6 +142,38 @@
     </div>
     <p class="footer-copy">© 2026 RecycleCo — Tous droits réservés</p>
   </footer>
-
+<!-- MODAL MODIFICATION ANNONCE -->
+<div class="modal-fond" id="modal-modification">
+  <div class="modal">
+    <h2>Modifier l'annonce</h2>
+    <div class="champ">
+      <label>Titre</label>
+      <input type="text" id="modif-titre" placeholder="Titre de l'annonce" />
+    </div>
+    <div class="champ">
+      <label>Catégorie</label>
+      <select id="modif-categorie">
+        <option value="Bois">Bois</option>
+        <option value="Métal">Métal</option>
+        <option value="Carton">Carton / Papier</option>
+        <option value="Plastique">Plastique</option>
+        <option value="Verre">Verre</option>
+        <option value="Électronique">Électronique</option>
+      </select>
+    </div>
+    <div class="champ">
+      <label>Quantité estimée</label>
+      <input type="text" id="modif-quantite" placeholder="Ex : 50 kg" />
+    </div>
+    <div class="champ">
+      <label>Description</label>
+      <textarea id="modif-description" placeholder="Description..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-annuler" onclick="fermerModification()">Annuler</button>
+      <button class="btn-publier" onclick="sauvegarderModification()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
