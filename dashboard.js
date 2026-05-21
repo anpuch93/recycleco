@@ -310,9 +310,10 @@ async function demanderSuppression() {
   window.location.href = "index.html";
 }
 let annonceEnModification = null;
+let photosExistantes = [];
+let nouvellesPhotos = [];
 
 async function ouvrirModification(id) {
-  // Récupère l'annonce depuis Supabase
   const { data: annonce } = await db
     .from("annonces")
     .select("*")
@@ -322,16 +323,78 @@ async function ouvrirModification(id) {
   if (!annonce) return;
 
   annonceEnModification = id;
+  photosExistantes = annonce.photos || [];
+  nouvellesPhotos = [];
+
   document.getElementById("modif-titre").value = annonce.titre || "";
   document.getElementById("modif-categorie").value = annonce.categorie || "Bois";
   document.getElementById("modif-quantite").value = annonce.quantite || "";
   document.getElementById("modif-description").value = annonce.description || "";
+
+  // Affiche les photos existantes
+  afficherPhotosModification();
+
   document.getElementById("modal-modification").classList.add("ouvert");
+}
+
+function afficherPhotosModification() {
+  const preview = document.getElementById("modif-photos-preview");
+  preview.innerHTML = "";
+
+  // Photos existantes avec bouton supprimer
+  photosExistantes.forEach((url, index) => {
+    preview.innerHTML += `
+      <div class="photo-thumb" id="existing-thumb-${index}">
+        <img src="${url}" alt="Photo ${index + 1}" />
+        <button class="photo-suppr" onclick="supprimerPhotoExistante(${index})">✕</button>
+      </div>`;
+  });
+
+  // Nouvelles photos sélectionnées
+  nouvellesPhotos.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.innerHTML += `
+        <div class="photo-thumb" id="new-thumb-${index}">
+          <img src="${e.target.result}" alt="Nouvelle photo" />
+          <button class="photo-suppr" onclick="supprimerNouvellePhoto(${index})">✕</button>
+        </div>`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Affiche le compteur
+  const total = photosExistantes.length + nouvellesPhotos.length;
+  const compteur = document.getElementById("modif-compteur");
+  if (compteur) compteur.textContent = `${total}/5 photo(s)`;
+}
+
+function supprimerPhotoExistante(index) {
+  photosExistantes.splice(index, 1);
+  afficherPhotosModification();
+}
+
+function supprimerNouvellePhoto(index) {
+  nouvellesPhotos.splice(index, 1);
+  afficherPhotosModification();
+}
+
+function ajouterNouvellesPhotos(files) {
+  const total = photosExistantes.length + nouvellesPhotos.length + files.length;
+  if (total > 5) {
+    alert("Maximum 5 photos au total.");
+    return;
+  }
+  nouvellesPhotos = [...nouvellesPhotos, ...Array.from(files)];
+  afficherPhotosModification();
 }
 
 function fermerModification() {
   document.getElementById("modal-modification").classList.remove("ouvert");
   annonceEnModification = null;
+  photosExistantes = [];
+  nouvellesPhotos = [];
+  document.getElementById("modif-photos-preview").innerHTML = "";
 }
 
 async function sauvegarderModification() {
@@ -339,14 +402,38 @@ async function sauvegarderModification() {
   const categorie = document.getElementById("modif-categorie").value;
   const quantite = document.getElementById("modif-quantite").value.trim();
   const description = document.getElementById("modif-description").value.trim();
+  const utilisateur = JSON.parse(localStorage.getItem("utilisateur"));
 
   if (!titre) {
     alert("Merci d'entrer un titre.");
     return;
   }
 
+  const btnSauvegarder = document.querySelector("#modal-modification .btn-publier");
+  btnSauvegarder.textContent = "Sauvegarde...";
+  btnSauvegarder.disabled = true;
+
   const icones = { Bois: "🪵", Métal: "🔩", Carton: "📦", Plastique: "♻️", Verre: "🫙", Électronique: "💻" };
   const couleurs = { Bois: "#EAF3DE", Métal: "#E6F1FB", Carton: "#FAEEDA", Plastique: "#FBEAF0", Verre: "#E1F5EE", Électronique: "#F3E8FF" };
+
+  // Upload des nouvelles photos
+  let urlsNouvellesPhotos = [];
+  for (const file of nouvellesPhotos) {
+    const nomFichier = `${utilisateur.id}/${Date.now()}-${file.name.replace(/\s/g, "_")}`;
+    const { data, error } = await db.storage
+      .from("photos-annonces")
+      .upload(nomFichier, file, { upsert: true });
+
+    if (!error) {
+      const { data: urlData } = db.storage
+        .from("photos-annonces")
+        .getPublicUrl(nomFichier);
+      urlsNouvellesPhotos.push(urlData.publicUrl);
+    }
+  }
+
+  // Combine photos existantes + nouvelles
+  const toutesLesPhotos = [...photosExistantes, ...urlsNouvellesPhotos];
 
   const { error } = await db
     .from("annonces")
@@ -356,73 +443,20 @@ async function sauvegarderModification() {
       quantite: quantite || "Non précisé",
       description,
       icone: icones[categorie] || "📦",
-      couleur: couleurs[categorie] || "#f0f0f0"
+      couleur: couleurs[categorie] || "#f0f0f0",
+      photos: toutesLesPhotos.length > 0 ? toutesLesPhotos : null
     })
     .eq("id", annonceEnModification);
 
+  btnSauvegarder.textContent = "Sauvegarder";
+  btnSauvegarder.disabled = false;
+
   if (error) {
-    alert("Erreur lors de la modification : " + error.message);
+    alert("Erreur : " + error.message);
     return;
   }
 
   fermerModification();
   await chargerMesAnnonces();
-  alert("Annonce modifiée avec succès ! ✅");
-}
-// Gestion des photos
-let photosSelectionnees = [];
-
-function previsualiserPhotos(files) {
-  const preview = document.getElementById("photos-preview");
-  const MAX = 5;
-
-  if (files.length > MAX) {
-    alert(`Maximum ${MAX} photos autorisées.`);
-    return;
-  }
-
-  photosSelectionnees = Array.from(files);
-  preview.innerHTML = "";
-
-  photosSelectionnees.forEach((file, index) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      preview.innerHTML += `
-        <div class="photo-thumb" id="thumb-${index}">
-          <img src="${e.target.result}" alt="Photo ${index + 1}" />
-          <button class="photo-suppr" onclick="supprimerPhoto(${index})">✕</button>
-        </div>`;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function supprimerPhoto(index) {
-  photosSelectionnees.splice(index, 1);
-  const fakeFiles = new DataTransfer();
-  photosSelectionnees.forEach(f => fakeFiles.items.add(f));
-  document.getElementById("input-photos").files = fakeFiles.files;
-  previsualiserPhotos(fakeFiles.files);
-}
-
-async function uploaderPhotos(utilisateurId) {
-  const urls = [];
-  for (const file of photosSelectionnees) {
-    const nomFichier = `${utilisateurId}/${Date.now()}-${file.name.replace(/\s/g, "_")}`;
-    const { data, error } = await db.storage
-      .from("photos-annonces")
-      .upload(nomFichier, file, { upsert: true });
-
-    if (error) {
-      console.error("Erreur upload:", error);
-      continue;
-    }
-
-    const { data: urlData } = db.storage
-      .from("photos-annonces")
-      .getPublicUrl(nomFichier);
-
-    urls.push(urlData.publicUrl);
-  }
-  return urls;
+  alert("Annonce modifiée ! ✅");
 }

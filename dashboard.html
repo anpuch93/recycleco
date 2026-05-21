@@ -144,7 +144,7 @@
   </footer>
 <!-- MODAL MODIFICATION ANNONCE -->
 <div class="modal-fond" id="modal-modification">
-  <div class="modal">
+  <div class="modal" style="max-height:90vh;overflow-y:auto;">
     <h2>Modifier l'annonce</h2>
     <div class="champ">
       <label>Titre</label>
@@ -169,11 +169,21 @@
       <label>Description</label>
       <textarea id="modif-description" placeholder="Description..."></textarea>
     </div>
+    <div class="champ">
+      <label>Photos <span id="modif-compteur" style="color:#999;font-size:12px;">0/5</span></label>
+      <div class="photos-preview" id="modif-photos-preview"></div>
+      <div class="upload-zone" style="margin-top:8px;" 
+        onclick="document.getElementById('modif-input-photos').click()">
+        <div class="upload-icone">📷</div>
+        <div class="upload-texte">Ajouter des photos</div>
+        <div class="upload-sous-texte">Max 5 photos au total</div>
+      </div>
+      <input type="file" id="modif-input-photos" accept="image/*" multiple style="display:none"
+        onchange="ajouterNouvellesPhotos(this.files)" />
+    </div>
     <div class="modal-btns">
       <button class="btn-annuler" onclick="fermerModification()">Annuler</button>
       <button class="btn-publier" onclick="sauvegarderModification()">Sauvegarder</button>
     </div>
   </div>
 </div>
-</body>
-</html>
