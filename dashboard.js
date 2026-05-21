@@ -100,6 +100,12 @@ async function publierAnnonce() {
   const icones = { Bois: "🪵", Métal: "🔩", Carton: "📦", Plastique: "♻️", Verre: "🫙", Électronique: "💻" };
   const couleurs = { Bois: "#EAF3DE", Métal: "#E6F1FB", Carton: "#FAEEDA", Plastique: "#FBEAF0", Verre: "#E1F5EE", Électronique: "#F3E8FF" };
 
+// Upload photos si présentes
+  let photos = [];
+  if (photosSelectionnees.length > 0) {
+    photos = await uploaderPhotos(utilisateur.id);
+  }
+
   const { error } = await db.from("annonces").insert({
     utilisateur_id: utilisateur.id,
     titre,
@@ -109,6 +115,7 @@ async function publierAnnonce() {
     ville: utilisateur.ville,
     icone: icones[categorie] || "📦",
     couleur: couleurs[categorie] || "#f0f0f0",
+    photos: photos.length > 0 ? photos : null,
     urgent: false,
     active: true
   });
@@ -268,6 +275,9 @@ function ouvrirFormulaire() {
 
 function fermerFormulaire() {
   document.getElementById("modal-fond").classList.remove("ouvert");
+  photosSelectionnees = [];
+  const preview = document.getElementById("photos-preview");
+  if (preview) preview.innerHTML = "";
 }
 
 async function demanderSuppression() {
@@ -358,4 +368,61 @@ async function sauvegarderModification() {
   fermerModification();
   await chargerMesAnnonces();
   alert("Annonce modifiée avec succès ! ✅");
+}
+// Gestion des photos
+let photosSelectionnees = [];
+
+function previsualiserPhotos(files) {
+  const preview = document.getElementById("photos-preview");
+  const MAX = 5;
+
+  if (files.length > MAX) {
+    alert(`Maximum ${MAX} photos autorisées.`);
+    return;
+  }
+
+  photosSelectionnees = Array.from(files);
+  preview.innerHTML = "";
+
+  photosSelectionnees.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.innerHTML += `
+        <div class="photo-thumb" id="thumb-${index}">
+          <img src="${e.target.result}" alt="Photo ${index + 1}" />
+          <button class="photo-suppr" onclick="supprimerPhoto(${index})">✕</button>
+        </div>`;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function supprimerPhoto(index) {
+  photosSelectionnees.splice(index, 1);
+  const fakeFiles = new DataTransfer();
+  photosSelectionnees.forEach(f => fakeFiles.items.add(f));
+  document.getElementById("input-photos").files = fakeFiles.files;
+  previsualiserPhotos(fakeFiles.files);
+}
+
+async function uploaderPhotos(utilisateurId) {
+  const urls = [];
+  for (const file of photosSelectionnees) {
+    const nomFichier = `${utilisateurId}/${Date.now()}-${file.name.replace(/\s/g, "_")}`;
+    const { data, error } = await db.storage
+      .from("photos-annonces")
+      .upload(nomFichier, file, { upsert: true });
+
+    if (error) {
+      console.error("Erreur upload:", error);
+      continue;
+    }
+
+    const { data: urlData } = db.storage
+      .from("photos-annonces")
+      .getPublicUrl(nomFichier);
+
+    urls.push(urlData.publicUrl);
+  }
+  return urls;
 }
