@@ -31,7 +31,6 @@ async function inscrireParticulier() {
     return;
   }
 
-  // Création du compte dans Supabase Auth
   const { data, error } = await db.auth.signUp({
     email: email,
     password: mdp,
@@ -45,14 +44,12 @@ async function inscrireParticulier() {
     return;
   }
 
-  // Sauvegarde dans la table utilisateurs
   await db.from("utilisateurs").insert({
     id: data.user.id,
     type: "particulier",
     nom, email, ville
   });
 
-  alert("Compte créé ! Bienvenue " + nom + " 🎉\nVérifiez votre email pour confirmer votre compte.");
   window.location.href = "confirmation.html";
 }
 
@@ -87,7 +84,6 @@ async function inscrirePro() {
     return;
   }
 
-  // Création du compte dans Supabase Auth
   const { data, error } = await db.auth.signUp({
     email: email,
     password: mdp,
@@ -101,7 +97,6 @@ async function inscrirePro() {
     return;
   }
 
-  // Sauvegarde dans la table utilisateurs
   await db.from("utilisateurs").insert({
     id: data.user.id,
     type: "pro",
@@ -109,6 +104,5 @@ async function inscrirePro() {
     telephone: tel
   });
 
-  alert("Compte pro créé ! Bienvenue " + societe + " 🎉\nVérifiez votre email pour confirmer votre compte.");
   window.location.href = "confirmation.html";
 }
