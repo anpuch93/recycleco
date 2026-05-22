@@ -1,10 +1,26 @@
-// Affiche le message de confirmation si l'email vient d'être validé
-window.onload = function () {
+window.onload = async function () {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("confirmed") === "true") {
+
+  // Gère la confirmation email via token Supabase
+  const tokenHash = params.get("token_hash");
+  const type = params.get("type");
+
+  if (tokenHash && type) {
+    const { error } = await db.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: type
+    });
+
+    if (!error) {
+      document.getElementById("msg-confirmation").style.display = "block";
+    } else {
+      console.error("Erreur vérification token:", error);
+    }
+  } else if (params.get("confirmed") === "true") {
     document.getElementById("msg-confirmation").style.display = "block";
   }
 };
+
 async function seConnecter() {
   const email = document.getElementById("email").value.trim();
   const mdp = document.getElementById("mdp").value.trim();
@@ -20,7 +36,11 @@ async function seConnecter() {
   });
 
   if (error) {
-    alert("Email ou mot de passe incorrect.");
+    if (error.message.includes("Email not confirmed")) {
+      alert("Votre email n'est pas encore confirmé. Vérifiez votre boite mail.");
+    } else {
+      alert("Email ou mot de passe incorrect.");
+    }
     return;
   }
 
@@ -46,7 +66,11 @@ async function seConnecter() {
       telephone: meta.telephone || null
     };
 
-    await db.from("utilisateurs").insert(nouveauProfil);
+    const { error: insertError } = await db.from("utilisateurs").insert(nouveauProfil);
+    if (insertError) {
+      console.error("Erreur insertion profil:", insertError);
+    }
+
     localStorage.setItem("connecte", "true");
     localStorage.setItem("utilisateur", JSON.stringify(nouveauProfil));
     window.location.href = "dashboard.html";
