@@ -81,3 +81,22 @@ async function seConnecter() {
   localStorage.setItem("utilisateur", JSON.stringify(profil));
   window.location.href = "dashboard.html";
 }
+async function motDePasseOublie() {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    alert("Merci d'entrer votre email d'abord.");
+    return;
+  }
+
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://recycle-co.fr/reset-password.html"
+  });
+
+  if (error) {
+    alert("Erreur : " + error.message);
+    return;
+  }
+
+  alert("Un email de réinitialisation a été envoyé à " + email + " ✅");
+}
